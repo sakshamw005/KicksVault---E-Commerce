@@ -1,0 +1,89 @@
+:root {
+  --kv-bg: #0f1115;
+  --kv-surface: #161a21;
+  --kv-ink: #e5e7eb;
+  --kv-muted: #9aa3b2;
+  --kv-primary: #00d084;
+  --kv-accent: #7c3aed;
+}
+
+html, body {
+  background: var(--kv-bg);
+  color: var(--kv-ink);
+  font-family: 'Poppins', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-image:
+    radial-gradient(60px 60px at 10% 10%, rgba(124,58,237,0.08) 0, transparent 60%),
+    radial-gradient(80px 80px at 80% 20%, rgba(0,208,132,0.08) 0, transparent 80%),
+    radial-gradient(40px 40px at 30% 80%, rgba(255,255,255,0.04) 0, transparent 40%);
+  background-repeat: no-repeat;
+}
+
+.kv-navbar {
+  background: var(--kv-surface) !important;
+  border-bottom: 1px solid #1f2430;
+}
+
+.kv-brand {
+  font-weight: 600;
+  color: var(--kv-primary) !important;
+  letter-spacing: 0.5px;
+}
+
+.kv-search {
+  background: #0b0d11;
+  border: 1px solid #252a36;
+  color: var(--kv-ink);
+}
+.kv-search::placeholder { color: var(--kv-muted); }
+
+.kv-badge {
+  background: var(--kv-accent);
+  position: absolute;
+  top: -6px;
+  right: -12px;
+}
+
+.kv-card {
+  background: var(--kv-surface);
+  border: 1px solid #1f2430;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.kv-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.3); }
+
+.kv-price { color: var(--kv-primary); font-weight: 600; }
+
+.kv-btn-primary {
+  background: var(--kv-primary);
+  color: #08110d;
+  border: none;
+}
+.kv-btn-primary:hover { filter: brightness(0.9); }
+
+.kv-hero {
+  background: linear-gradient(135deg, rgba(124,58,237,.25), rgba(0,208,132,.15));
+  border: 1px solid #1f2430;
+}
+
+.kv-hero-pattern {
+  background-image:
+    radial-gradient(8px 8px at 20px 20px, rgba(255,255,255,0.06) 30%, transparent 31%),
+    radial-gradient(8px 8px at 60px 40px, rgba(255,255,255,0.06) 30%, transparent 31%),
+    radial-gradient(8px 8px at 100px 20px, rgba(255,255,255,0.06) 30%, transparent 31%);
+  background-size: 140px 80px;
+}
+
+.kv-toast {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 1000;
+  min-width: 260px;
+  border-radius: 10px;
+  padding: 10px 14px;
+  border: 1px solid #1f2430;
+  background: rgba(22,26,33,0.95);
+  color: var(--kv-ink);
+}

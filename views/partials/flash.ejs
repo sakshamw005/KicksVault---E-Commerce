@@ -1,0 +1,17 @@
+<% if(success && success.length){ %>
+  <div class="kv-toast">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-circle-check text-emerald-400"></i>
+      <span class="text-sm"><%=success%></span>
+    </div>
+  </div>
+<% } %>
+
+<% if(error && error.length){ %>
+  <div class="kv-toast" style="border-color:#6b1d1d;background:rgba(55,7,7,0.95)">
+    <div class="flex items-center gap-2">
+      <i class="fa-solid fa-circle-exclamation text-red-400"></i>
+      <span class="text-sm"><%=error%></span>
+    </div>
+  </div>
+<% } %>

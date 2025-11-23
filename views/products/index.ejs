@@ -1,0 +1,31 @@
+<% layout('layouts/boilerplate') %>
+<%- include('../partials/navbar') %>
+<%- include('../partials/flash') %>
+
+<div class="max-w-6xl mx-auto px-4 my-6">
+  <div class="p-8 rounded-lg border border-gray-800 bg-gradient-to-br from-kvaccent/20 to-kvprimary/10 kv-hero-pattern">
+    <h1 class="text-3xl font-semibold">Premium Men's Sneakers</h1>
+    <p class="text-sm text-gray-400">Curated drops, fast navigation, and clean UI to find your fit.</p>
+  </div>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+    <% for(let item of products){ %>
+      <div class="rounded-lg border border-gray-800 bg-kvsurface overflow-hidden">
+        <img src="<%=item.img%>" alt="<%=item.name%>" class="w-full h-56 object-cover" />
+        <div class="p-4">
+          <h3 class="text-lg font-medium"><%=item.name%></h3>
+          <p class="text-kvprimary font-semibold mt-1">₹<%=item.price%></p>
+          <p class="text-gray-400 text-sm mt-2"><%=item.desc%></p>
+          <div class="mt-3 flex items-center gap-3">
+            <a href="/products/<%=item._id%>" class="inline-flex items-center justify-center px-3 py-2 bg-gradient-to-r from-kvprimary to-emerald-400 text-black rounded-md text-sm">View Product</a>
+            <% if (currentUser && currentUser.role === 'admin') { %>
+            <form action="/products/<%=item._id%>?_method=DELETE" method="POST">
+              <button class="inline-flex items-center justify-center px-3 py-2 border border-red-600 text-red-400 rounded-md text-sm">Delete</button>
+            </form>
+            <% } %>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>

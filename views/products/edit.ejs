@@ -1,0 +1,82 @@
+<% layout('layouts/boilerplate') %>
+<%- include('../partials/navbar') %>
+
+<div class = "row">
+        <div class = "col-6 mx-auto">
+
+                <form action="/products/<%= foundProduct._id %>?_method=PATCH" class = "needs-validation" method = "POST" novalidate> <!--override is done as we can't patch from form directly so we use POST and then override it -->
+
+                    <div class = "mb-3">
+                        <label for = "naam" >Name : </label>
+                        <input type = "text" class = "form-control" name = "name" id = "naam" placeholder="Write the name of the product" value = "<%=foundProduct.name%>" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter the Name.
+                        </div>
+                    </div>
+
+                    <div class = "mb-3">
+                        <label for = "img" >Image : </label>
+                        <input type = "text" class = "form-control" name = "img" id = "img" placeholder="Image URL of the product" value = "<%=foundProduct.img%>" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please enter image link .
+                        </div>
+                    </div>
+
+                    <div class = "mb-3">
+                        <label for = "paisa" >Price : </label>
+                        <input type = "number" class = "form-control" name = "price" id = "paisa" placeholder="Write the price of the product" value = "<%=foundProduct.price%>" required>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please choose the price of product .
+                        </div>
+                    </div>
+
+                    <div class = "mb-3">
+                        <label for = "desc" >Description : </label>
+                        <textarea name = "desc" id = "desc" rows = "5" placeholder="Description of the product"required ><%=foundProduct.name%></textarea>
+                        <div class="valid-feedback">
+                            Looks good!
+                        </div>
+                        <div class="invalid-feedback">
+                            Please write a Description about the product .
+                        </div>
+                    </div>
+                    
+                    <button class = "btn btn-sm btn-success" type = "submit">Edit product</button> 
+
+                </form>
+
+        </div>
+</div>
+<script>
+
+        //this is a function which has no name , is called 'iife' , immediately invoke function expression , as soon as it hits script line . 
+        (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+
+            form.classList.add('was-validated')
+            }, false)
+        })
+        })()
+</script>
+</body>
+</html>

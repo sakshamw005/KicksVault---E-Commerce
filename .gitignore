@@ -1,0 +1,14 @@
+node_modules/
+.env
+.env.* 
+.DS_Store
+.vscode/
+.idea/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/coverage
+/.parcel-cache
+/dist
+*.local
+secrets.json

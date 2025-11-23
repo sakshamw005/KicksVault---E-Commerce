@@ -1,0 +1,27 @@
+<nav class="sticky top-0 z-50 bg-kvsurface/90 backdrop-blur border-b border-gray-800">
+  <div class="max-w-6xl mx-auto px-4">
+    <div class="flex items-center justify-between h-14">
+      <div class="flex items-center gap-6">
+        <a href="/products" class="text-kvprimary font-semibold tracking-wide">KicksVault</a>
+        <a href="/" class="text-gray-300 hover:text-white">Home</a>
+        <% if (currentUser && currentUser.role === 'admin') { %>
+          <a href="/product/new" class="text-gray-300 hover:text-white">New</a>
+        <% } %>
+      </div>
+      <form action="/products" method="GET" class="hidden md:block">
+        <input name="q" type="search" placeholder="Search sneakers" class="w-64 px-3 py-2 rounded-md bg-[#0b0d11] border border-gray-700 text-sm text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-kvaccent">
+      </form>
+      <div class="flex items-center gap-4">
+        <% if (!currentUser) { %>
+          <a href="/login" class="text-gray-300 hover:text-white">Login</a>
+        <% } else { %>
+          <a href="/cart" class="relative text-gray-300 hover:text-white">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="absolute -top-2 -right-3 bg-kvaccent text-white text-[10px] px-2 py-0.5 rounded-full"><%= typeof cartCount !== 'undefined' ? cartCount : 0 %></span>
+          </a>
+          <a href="/logout" class="text-gray-300 hover:text-white">Logout</a>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,27 @@
+<% layout('layouts/boilerplate') %>
+<%- include('../partials/navbar') %>
+
+<div class="min-h-[60vh] flex items-center justify-center px-4">
+  <div class="w-full max-w-xl rounded-lg border border-gray-800 bg-kvsurface p-6">
+    <h2 class="text-xl font-semibold mb-4">Add product</h2>
+    <form action="/products" method="POST" class="space-y-3">
+      <div>
+        <label for="naam" class="block text-sm text-gray-300">Name</label>
+        <input type="text" name="name" id="naam" placeholder="Name of the product" class="mt-1 w-full px-3 py-2 rounded-md bg-[#0b0d11] border border-gray-700 text-sm text-gray-200" required />
+      </div>
+      <div>
+        <label for="img" class="block text-sm text-gray-300">Image URL</label>
+        <input type="text" name="img" id="img" placeholder="Image URL" class="mt-1 w-full px-3 py-2 rounded-md bg-[#0b0d11] border border-gray-700 text-sm text-gray-200" required />
+      </div>
+      <div>
+        <label for="paisa" class="block text-sm text-gray-300">Price</label>
+        <input type="number" name="price" id="paisa" placeholder="Price" class="mt-1 w-full px-3 py-2 rounded-md bg-[#0b0d11] border border-gray-700 text-sm text-gray-200" required />
+      </div>
+      <div>
+        <label for="desc" class="block text-sm text-gray-300">Description</label>
+        <textarea name="desc" id="desc" rows="5" placeholder="Description of the product" class="mt-1 w-full px-3 py-2 rounded-md bg-[#0b0d11] border border-gray-700 text-sm text-gray-200" required></textarea>
+      </div>
+      <button class="w-full px-3 py-2 bg-gradient-to-r from-kvprimary to-emerald-400 text-black rounded-md" type="submit">Add product</button>
+    </form>
+  </div>
+</div>

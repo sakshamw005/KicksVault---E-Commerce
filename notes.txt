@@ -1,0 +1,457 @@
+npm init
+{
+  "name": "e-commerce",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Saksham Wadhwa",
+  "license": "ISC"
+}
+
+npm i express nodemon ejs mongoose
+
+mkdir public views
+
+const express = require('express') ;
+const app = express() ;
+const path = require('path') ;
+
+app.set('view engine','ejs') 
+app.set('views' , path.join(__dirname , 'views')) ;
+
+//public folder
+app.use(express.static(path.join(__dirname,'public'))) ;
+
+app.listen(8080 , ()=>{
+    console.log("PORT CONNECTED SUCCESSFULLY") ;
+})
+
+yahan tak task 1 done : basic server created
+
+---------------------------------------------------------------------------------------------------
+
+now I want to make my server and db connected to make them interact with each other 
+
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://127.0.0.1:27017/shopping-app')
+.then(()=>{
+    console.log("DB connected successfully")
+})
+.catch((err)=>{
+    console.log("DB error"); 
+    console.log(err)
+})
+
+task-2 done !!
+
+---------------------------------------------------------------------------------------------------
+
+task-3 db mai entry daalni hogi i.e. collection (model)
+
+jab bhi hum project banate hain , keep in mind : seperation of concerns
+
+views : templates
+public : static files
+models : schema & collection
+
+models mai jo schema banayenge : wo always capital letter
+
+jab do js files ko use krna , module.exports
+
+---------------------------------------------------------------------------------------------------
+
+task 4 : add dummy data = initial data to the ecommerce website 
+
+add initial data 
+
+we name file with some initial data as seed.js as it seeds up the db 
+
+uske andar ek array banana usko .insertMany
+
+------------------------------------------------------------------------------------------------------
+
+task 5 : db se products dikhane hain 
+get , post requests , they interact with server these are routes
+
+since we can export app.js , we use express.Router() to perform routing
+
+according to RESTFUL Routing :
+
+/products          GET      display all products
+/product/new        GET      show form to make new products
+/products            POST     Adds new product to the db then redirects
+/products/:id        GET      shows info about a product
+/products/edit/:id   GET      shows edit form of one product
+/products/:id        PUT      Update a particular blog and then redirects
+/products/:id        DELETE   deletes a particular blog and then redirects     
+
+----------------------------------------------------------------------------------------------
+
+MVC : Model View Controller 
+
+----------------------------------------------------------------------------------------------
+
+video - 55 :
+
+('view engine' , 'ejs') 
+express has engine(view engine) which is default present , we define that it will read files of .ejs format 
+
+.ejs is a templating language 
+
+as we don't wanna work with default , we can use a new engine `ejs mate`
+
+-----------------------------------------------------------------------------------------------
+
+navbar :
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+      <a class="navbar-brand" href="#">Shopping App</a>
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">New</a>
+        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
+        </li> -->
+      </ul>
+      <form class="d-flex" role="search">
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+</nav>
+
+
+boilerplate.ejs
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- bootstrap css  -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <title>Shopping Kart</title>
+</head>
+<body>
+
+
+    <!-- logic for body-->
+    <%- body %>
+
+    <!-- bootstrap js  -->
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+</body>
+</html>
+
+----------------------------------------------------------------------------------------------------
+
+now we start with Create operation :
+
+C : /products/new
+
+---------------------------------------------------------------------------------------------------------
+
+Reviews : 
+
+Relations : 
+  a) 1 : 1 , b) 1 : few , c) 1 : Many
+  few and many depends on prodcuct , 
+
+Reviews in our case would be 1 : Many 
+and will have a schema , 
+
+      |---------------------------|
+      |          rating           |
+      |---------------------------|
+      |         Comment           | 
+      |---------------------------|
+
+Schema banta models mai : 
+
+suppose we have multiple products , multiple reviews , then how would we relate product with reviews
+We'll use object id (_id) inside arr(as 1 product can have multiple reviews) , each review will have a unique object id , therefore we don't store complete data but their objectId and build a relationship b/w the two 
+
+First we edit the schema of Products and add a review thing in it
+with type : mongoose.Schema.Types.ObjectId 
+      ref : 'Review' 
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+video - 56 
+
+first we create a route called review.js in routes folder
+and to post a review basic thing is that we can give a form which will have input (1-5) and comment and beneath that a submit button which will make a post request .
+
+since on clicking view product we are opened to a new page , which is shown by show.ejs . So , beneath the leave a review we create a form 
+
+id chahie ho agar toh req.params se utha lo {} karke
+
+
+ab humei add review ke neeche jo existing reviews hai wo bhi show krne hai , toh we use the concept of populate 
+i.e. 1 to many relation se cheezon ko uthana on show.ejs based on objectId only !
+
+
+-----------------------------------------------------------------------------------------------------------------------
+
+middlewares : a function only , it has 3 things : request , response , next
+
+next : aage bdho , jab yeh function chal jaye toh kya ho this is told by next .
+
+(req,res,next)=>{
+  clg("kaam done") ;
+  next( ) ;
+}
+
+this is for , when we delete a product , along with it , its reviews also get deleted
+
+2 tareeke : 1) jab delete hit ho , toh pehle uss specific product ke reviews wala array delete hojaye then product delete hojaye [not used in production] we use findByIdAndDelete
+            2) Use of middleware : we use mongoose middleware : by default findByIdAndDelete also uses a middleware so 
+
+
+-------------------------------------------------------------------------------------------------------------------------------
+video 57 :
+
+Validation : 1) Client side Validation
+             2) Server side Validation
+
+required keyword , novalidate keyword in bootstrap form Validation
+
+novalidate keyword apke required keyword ka existence khatam kardeta hai
+
+to give errors as per our choice , we have used novalidate with needs-Validation written in the form class , with required so that required is ignored and custom rules can be used . 
+
+this is all about client side Validation 
+
+now we put all the routes in try-catch block :
+
+Server side Validation : done by backend 
+
+with the help of JOI i.e. a npm package , it is a schema descriptive package 
+
+steps :
+1) Create a schema of JOI
+2) JAHA Pr bhi isko rkhu fir usko validate krna hai
+
+npm i joi
+
+then create a schema of Joi 
+const Joi = require('joi');
+
+const productSchema = Joi.object({
+    name : Joi.string().required(),
+    img : Joi.string().required(),
+    price : Joi.string().min(0).required(),
+    desc : Joi.string().required()
+})
+
+const reviewSchema = Joi.object({
+    rating : Joi.string().min(0).max(5).required(),
+    comment : Joi.string().required() 
+})
+
+module.exports = {productSchema,reviewSchema} ;
+
+it will be something like :
+
+products --> Validation --> server
+
+so it is somewhat acting like a middleware , toh we create a file called middleware .
+
+-----------------------------------------------------------------------------------------------------------------
+
+Cookies & Session :
+
+Cookies : Client side storage , it's a key-value pair , 
+
+Cookies humein server bhejta hai , so that it is stored on the client . 
+yeh har outgoing request ke baad store hoti 
+
+3 kaam :
+1) Personalisation , 2) Session management , 3) Tracking
+
+They are Stateful i.e. jo previous state par depend krta hain
+
+Cookies ko manage krne ke liye ek package hai cookie-parser
+
+everything about cookie is in cookie-demo folder , cookies are not preferred at all , as they aren't secure . Because they can be manipulated 
+
+so we use Session , as it is stored on server side storage
+
+
+Signed cookies : we use package cookie-parser 
+
+when w use signed cookie , we send a string in :
+app.use(cookieParser('youneedabettersecret')) ;
+
+app.get('/' , (req,res)=>{
+    console.log(req.cookies) ;
+    res.send(req.cookies) ;
+})
+//signedcookie 
+app.get('/getsignedcookies' , (req,res)=>{
+    res.cookie('saksham' , 'badmosh' , {signed:true}) ; //by default signed is set as false 
+    res.send('cookie sent successfully') ;
+})
+
+
+on directly accessing localhost:8080 , we can't directly see the signed cookie
+
+but if in this if we send
+app.get('/' , (req,res)=>{
+    console.log(req.cookies) ;
+    res.send(req.signedCookies) ;
+}) toh we can see signed cookies also 
+
+-----------------------------------------------------------------------------------------------
+
+video 57 :
+
+sessions stores objects (key-value pair) 
+
+what is a session ?
+When we request server , server responds with cookies also , cookies have particular session id , server allocated some memory at Server side storage for cookies to take some space .
+
+and when we request nxt time , along with our request cookies saving our data also go to server .
+
+to use session we have a npm package called 'express-session' , we install it 
+
+after that we setup a basic server , 
+
+const express = require('express') ;
+const app = express() ;
+const session = require('express-session') ;
+
+app.use(session({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: true,
+  //cookie: { secure: true } //for https
+}))
+
+app.get('/' , (req,res)=>{
+    res.send("Welcome to session") ;
+})
+
+app.listen(8080 , ()=>{
+    console.log("server connected at port 8080") ;
+    
+})
+
+in this when we access '/' , see cookies we get a session id 
+http only flag is also set
+
+
+after this we setup a /viewcount api , in this when we visit in a session multiple times from browser the count increases
+but as soon as we refresh the server , the count restarts
+
+app.get('/viewcount' , (req,res)=>{
+    if(req.session.count){
+        req.session.count+=1 ;
+    }
+    else{
+        req.session.count = 1 ;
+    }
+    res.send(`you visited the site ${req.session.count} times`) ;
+})
+
+this shows that session is a server side storage based . 
+
+---------------------------------------------------------------------------------------------------------------------------
+
+flash messages : Item added 
+
+can be installed using 'npm i connect-flash'
+
+
+locals : ek object jisee hum local storage 
+
+we create a flash.ejs file in partials , and link this ejs file with every action as edit , delete , add and send the same key
+
+-------------------------------------------------------------------------------------------------------------------------
+
+Authentication & Authorization
+
+
+Passport.js : It is just a technique , ek limitation : Authentication middleware for node.js only 
+
+facebook login , github login is called oauth 
+
+we'll use Passport-local 
+
+for Authentication we'll need user , its scema : Name , email , username , Password
+its data will not be stored in database , atleast pw shouldn't be in database .
+
+Password will be first hashed , then stored .
+
+
+Hashing function : o/p se input impossible
+
+passport-local is strategy
+passport-local-mongoose is a tool used for hashing , store , hashsave , db mai save 
+
+----------------------------------------------------------------
+
+video 59 : 
+
+PasspoRT-Local-Mongoose automatically has username and pw thing
+
+what are static methods ? Wo methods jo directly schema ke upar apply hojate h 
+
+methods :
+
+authenticate() : Generate a function that is used in Passport's Local strategy
+serializeUser() : to add a user in a session
+deserializeUser() : 
+register(user , password , cb) : convenience method to register a new user {user jo bhi details hain , cb : call back , password : ko second argument taki alag treat ho than user}
+
+pehle passport , local strategies , user ko ,  Authentication ke routes ko require kiya , 
+
+then User schema ko bhi we need to use some middleware to initalise passport and passport.session , then passport.serializeUser(User.serializeUser()) and passport.deserializeUser(User.deserializeUser())
+
+after user register we can see :
+
+{"email":"sam@gmail.com","_id":"68ca264a1edb19ed59fc9db7","username":"sam","salt":"bd5b04617fd51415d2074511aacedc5bd92b6f32495f9b41e516a60fb2a0e106",
+"hash":"b8b4b1cb055cbdb436b52cce587794ceb70cfd94f7b3440155f89a39cc27bdcb50878ef3c198529f2000f356f6b60395b0dbfcfefbf0b3c73ba2e62312eece84ff97b794dbf
+a9024c2076d4e0fde8b99db1f6332b1240c304ab3fc971c57a253ff4651a7ec102998d3b7b56c1e2eced7b49d040d84f9264d98261e9addae3729fb42ec239b0e3d6b4ed3c0e5534f34
+2ae0dc7573fb02417e189019bdde386afe88
+7a1d4970c78bf0b78df49dba4b501cfafd3a8b7a075199d2f89ee4709a9d29e8255d94c9ca81f2c5e89a1466286855fa9b638ee6d3d211f
+91af0b722e031652548722028e3762278578123531b71c8c73ad5b189f53147866d5ee219cafcb6c27884ee6e0b87f18bf697419a5c738c6e13b82f8ce229bfd7de7f7f173c512eabd0
+5f5a06b77d970c6f28da30d1601b272ec4d4fb9c3e59aa561a8b47a41a0559473992317adf1800a117e48d1f58dec519706cab517e09633f73a6d7feb1a0bff27f6e80fdccb16bf80b6
+a88f945fdab542e91dd343595d9d1dee2aa7a382cc677615e6b082986323baedfde5f586d48e6624b302b7ec898f27d098e6423b8610447a8a0b29b317f66b6951847a29b8c179c122e
+94c2ace0865f43c5a5dfa2b7785bc2dd19b1469e7ae83962618f161630b3e03d1513ee2e39631828635d62dd668a23c2764fc4e141f1c3baded309a5d96bb95f060cea4dd4560a174c6
+4d9","__v":0}
+
+after login and logout 
+
+in login after login we get a new object req.user which has 
+
+{
+  _id: new ObjectId('68ca264a1edb19ed59fc9db7'),
+  email: 'sam@gmail.com',
+  username: 'sam',
+  salt: 'bd5b04617fd51415d2074511aacedc5bd92b6f32495f9b41e516a60fb2a0e106',
+  hash: 'b8b4b1cb055cbdb436b52cce587794ceb70cfd94f7b3440155f89a39cc27bdcb50878ef3c198529f2000f356f6b60395b0dbfcfefbf0b3c73ba2e62312eece84ff97b794dbfa9024c2076d4e0fde8b99db1f6332b1240c304ab3fc971c57a253ff4651a7ec102998d3b7b56c1e2eced7b49d040d84f9264d98261e9addae3729fb42ec239b0e3d6b4ed3c0e5534f342ae0dc7573fb02417e189019bdde386afe887a1d4970c78bf0b78df49dba4b501cfafd3a8b7a075199d2f89ee4709a9d29e8255d94c9ca81f2c5e89a1466286855fa9b638ee6d3d211f91af0b722e031652548722028e3762278578123531b71c8c73ad5b189f53147866d5ee219cafcb6c27884ee6e0b87f18bf697419a5c738c6e13b82f8ce229bfd7de7f7f173c512eabd05f5a06b77d970c6f28da30d1601b272ec4d4fb9c3e59aa561a8b47a41a0559473992317adf1800a117e48d1f58dec519706cab517e09633f73a6d7feb1a0bff27f6e80fdccb16bf80b6a88f945fdab542e91dd343595d9d1dee2aa7a382cc677615e6b082986323baedfde5f586d48e6624b302b7ec898f27d098e6423b8610447a8a0b29b317f66b6951847a29b8c179c122e94c2ace0865f43c5a5dfa2b7785bc2dd19b1469e7ae83962618f161630b3e03d1513ee2e39631828635d62dd668a23c2764fc4e141f1c3baded309a5d96bb95f060cea4dd4560a174c64d9',
+  __v: 0
+} sam
+
+so we can access anything of the above , we put in inside the middleware
+
+app.use((req,res,next)=>{ // a middleware for locals
+    res.locals.currentUser = req.user ; -------------> by this line 
+    res.locals.success = req.flash('success') ;
+    res.locals.error = req.flash('error') ;
+    next() ;
+}) 

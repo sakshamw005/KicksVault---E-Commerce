@@ -82,6 +82,7 @@ The application is deployed on **Render**, with the database hosted on **MongoDB
 ---
 
 ## **Project Structure**
+```
 KicksVault
 │── app.js
 │── seed.js
@@ -109,7 +110,7 @@ KicksVault
 ├── auth/
 ├── products/
 └── *.ejs
-
+```
 Author
 
 Saksham Wadhwa

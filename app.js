@@ -17,8 +17,8 @@ const reviewRoutes = require('./routes/review') ;
 const authRoutes = require('./routes/auth') ; 
 const cartRoutes = require('./routes/cart') ; 
 
-
-mongoose.connect('mongodb://127.0.0.1:27017/shopping-sam-app')
+const dbURL = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017/shopping-sam-app';
+mongoose.connect(dbURL)
 .then(()=>{
     console.log("DB connected successfully")
 })
@@ -29,10 +29,15 @@ mongoose.connect('mongodb://127.0.0.1:27017/shopping-sam-app')
 
 //for session
 let configSession = {
-  secret: 'keyboard cat',
-  resave: false,
-  saveUninitialized: true,
-}
+    secret: process.env.SESSION_SECRET || 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: true,
+        secure: false, // set true only if using https
+        maxAge: 1000 * 60 * 60 * 24, // 1 day
+    }
+};
 
 app.engine('ejs',ejsMate) ;
 app.set('view engine','ejs') // view engine apki .ejs files ko dekhega 
@@ -75,7 +80,8 @@ app.use(cartRoutes) ; // cart routes
 
 app.get('/', (req,res)=>{ res.render('home') }) ;
 
-app.listen(8080 , ()=>{
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
     console.log("PORT CONNECTED SUCCESSFULLY") ;
 })
 
